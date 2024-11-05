@@ -1,13 +1,13 @@
-package tn.esprit.tpfoyer;
+package tn.esprit.spring;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import tn.esprit.tpfoyer.entity.Etudiant;
-import tn.esprit.tpfoyer.repository.EtudiantRepository;
-import tn.esprit.tpfoyer.service.EtudiantServiceImpl;
+import tn.esprit.spring.DAO.Entities.Etudiant;
+import tn.esprit.spring.DAO.Repositories.EtudiantRepository;
+import tn.esprit.spring.Services.Etudiant.EtudiantService;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +24,7 @@ public class TestMockito {
     private EtudiantRepository etudiantRepository;
 
     @InjectMocks
-    private EtudiantServiceImpl etudiantService;
+    private EtudiantService etudiantService;
 
     @Test
     public void testRetrieveAllEtudiants() {
@@ -34,7 +34,7 @@ public class TestMockito {
         when(etudiantRepository.findAll()).thenReturn(List.of(etudiant));
 
         // Act
-        var result = etudiantService.retrieveAllEtudiants();
+        var result = etudiantService.findAll();
 
         // Assert
         assertNotNull(result);
@@ -50,7 +50,7 @@ public class TestMockito {
         when(etudiantRepository.findById(etudiant.getIdEtudiant())).thenReturn(Optional.of(etudiant));
 
         // Act
-        Etudiant foundEtudiant = etudiantService.retrieveEtudiant(etudiant.getIdEtudiant());
+        Etudiant foundEtudiant = etudiantService.findById(etudiant.getIdEtudiant());
 
         // Assert
         assertNotNull(foundEtudiant);
@@ -66,7 +66,7 @@ public class TestMockito {
         when(etudiantRepository.save(any(Etudiant.class))).thenReturn(etudiant);
 
         // Act
-        Etudiant savedEtudiant = etudiantService.addEtudiant(etudiant);
+        Etudiant savedEtudiant = etudiantService.addOrUpdate(etudiant);
 
         // Assert
         assertNotNull(savedEtudiant);
@@ -82,7 +82,7 @@ public class TestMockito {
         when(etudiantRepository.save(any(Etudiant.class))).thenReturn(etudiant);
 
         // Act
-        Etudiant modifiedEtudiant = etudiantService.modifyEtudiant(etudiant);
+        Etudiant modifiedEtudiant = etudiantService.addOrUpdate(etudiant);
 
         // Assert
         assertNotNull(modifiedEtudiant);
@@ -96,25 +96,11 @@ public class TestMockito {
         Long etudiantId = 1L;
 
         // Act
-        etudiantService.removeEtudiant(etudiantId);
+        etudiantService.deleteById(etudiantId);
 
         // Assert
         verify(etudiantRepository, times(1)).deleteById(etudiantId);
     }
 
-    @Test
-    public void testRecupererEtudiantParCin() {
-        // Arrange
-        Etudiant etudiant = new Etudiant();
-        etudiant.setCinEtudiant(123456789L);
-        when(etudiantRepository.findEtudiantByCinEtudiant(etudiant.getCinEtudiant())).thenReturn(etudiant);
 
-        // Act
-        Etudiant foundEtudiant = etudiantService.recupererEtudiantParCin(etudiant.getCinEtudiant());
-
-        // Assert
-        assertNotNull(foundEtudiant);
-        assertEquals(etudiant.getCinEtudiant(), foundEtudiant.getCinEtudiant());
-        verify(etudiantRepository, times(1)).findEtudiantByCinEtudiant(etudiant.getCinEtudiant());
-    }
 }

@@ -1,0 +1,5 @@
+tn\esprit\spring\DAO\Repositories\EtudiantRepository.class
+tn\esprit\spring\DAO\Entities\Etudiant.class
+tn\esprit\spring\Services\Etudiant\IEtudiantService.class
+tn\esprit\spring\DAO\Entities\Reservation.class
+tn\esprit\spring\Services\Etudiant\EtudiantService.class
